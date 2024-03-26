@@ -1,30 +1,38 @@
 //your JS code here. If required.
+// script.js
 const outputDiv = document.getElementById('output');
 
-function createPromise() {
+function createPromise(index) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const randomNum = Math.floor(Math.random() * 10) + 1;
       if (Math.random() < 0.5) {
-        resolve(randomNum);
+        resolve({ index, result: randomNum });
       } else {
-        reject('Error occurred');
+        reject({ index, error: 'Error occurred' });
       }
     }, 1000); // Resolve after 1 second
   });
 }
 
-const promises = Array.from({ length: 5 }, createPromise);
+const promises = Array.from({ length: 5 }, (_, index) => createPromise(index + 1));
 
-Promise.all(promises)
+Promise.allSettled(promises)
   .then(results => {
-    results.forEach((result, index) => {
-      const p = document.createElement('p');
-      p.textContent = `Promise ${index + 1} resolved with result: ${result}`;
-      outputDiv.appendChild(p);
+    results.forEach(result => {
+      if (result.status === 'fulfilled') {
+        const p = document.createElement('p');
+        p.textContent = `Promise ${result.value.index} resolved with result: ${result.value.result}`;
+        outputDiv.appendChild(p);
+      } else {
+        const p = document.createElement('p');
+        const index = result.reason.index ? result.reason.index : 'unknown';
+        p.textContent = `Promise ${index} rejected with error`;
+        outputDiv.appendChild(p);
+      }
     });
   })
   .catch(error => {
     console.error(error);
-    outputDiv.textContent = `Promise ${index + 1} rejected with error`;
+    outputDiv.textContent = 'An error occurred: ' + error;
   });
