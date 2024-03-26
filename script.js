@@ -1,5 +1,4 @@
 //your JS code here. If required.
-// script.js
 const outputDiv = document.getElementById('output');
 
 function createPromise(index) {
