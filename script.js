@@ -13,7 +13,7 @@ function simulateAsyncOperation() {
         if (isSuccess) {
             resolve(getRandomNumber());
         } else {
-            reject(new Error("Random error occurred"));
+            reject(new Error(""));
         }
     });
 }
@@ -34,7 +34,7 @@ Promise.all(promises)
             if (result.result) {
                 outputDiv.innerHTML += `<p>Promise ${index + 1} resolved with result: ${result.result}</p>`;
             } else {
-                outputDiv.innerHTML += `<p>Promise ${index + 1} rejected with error: ${result.error.message}</p>`;
+                outputDiv.innerHTML += `<p>Promise ${index + 1} rejected with error</p>`;
             }
         });
     });
